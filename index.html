@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="scripts.js"></script>
+    <script src="https://kit.fontawesome.com/f204662c91.js" crossorigin="anonymous"
+  ></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <title>Search a SAT</title>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="h2 text-uppercase bg-info text-center">
+            Know the details about next Satellite that passes you
+        </div>
+        <div class="d-flex flex-column">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4">
+                            <div><label for="CoOrdsLati">Latitude</label></div><br>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" name="CoOrdsLati" id="lati">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div><label for="CoOrdsLongi">Longitude</label></div><br>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" name="CoOrdsLongi" id="longi">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <p class="fw-bold">Difficulty in finding Co-Ordinates. Try Google Maps.</p>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                        Google Map
+                   </button>
+                </div>
+            </div>
+        </div>
+        <div><button type="button" class="btn btn-secondary" onclick="getSatellitesTimings()">Find TresPassing Satellite</button></div><br>  
+        <div class="d-flex justify-content-around">
+            <div class="card border border-dark bg-light" style="width: 22rem;">
+                <div class="d-flex justify-content-center p-3"><img class="img" src="./images/icons8-sunrise.gif" alt="culmination">
+                </div>
+                <div class="card-body">
+                  <p class="card-text">
+                      <h4 class="text-center">Rise</h4>
+                  </p>
+                  <div class="d-flex flex-column fs-3">
+                    <div><i class="fas fa-ruler"></i><div id="rise_altitude" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Altitude"></div></div>
+                    <div><i class="fas fa-drafting-compass"></i><div id="rise_azimuth" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth"></div></div>
+                    <div><i class="far fa-compass"></i><div id="rise_octant" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth Octant" ></div></div>
+                    <div><i class="far fa-calendar-alt"></i><div id="rise_timestamp" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Local Time" ></div></div>
+                    <div><i class="far fa-eye"></i><div id="rise_visible" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Visibility" ></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card border border-dark bg-light" style="width: 22rem;">
+                <div class="d-flex justify-content-center p-3"><img src="./images/icons8-sun.gif" class="img" alt="culmination"></div>
+                <div class="card-body">
+                  <p class="card-text">
+                    <h4 class="text-center">Culmination</h4>
+                  </p>
+                  <div class="d-flex flex-column fs-3">
+                    <div><i class="fas fa-ruler"></i><div id="culm_altitude" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Altitude" ></div></div>
+                    <div><i class="fas fa-drafting-compass"></i><div id="culm_azimuth" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth"></div></div>
+                    <div><i class="far fa-compass"></i><div id="culm_octant" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth Octant" ></div></div>
+                    <div><i class="far fa-calendar-alt"></i><div id="culm_timestamp" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Local Time"  ></div></div>
+                    <div><i class="far fa-eye"></i><div id="culm_visible" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Visibility" ></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card border border-dark bg-light" style="width: 22rem;">
+                <div class="d-flex justify-content-center p-3"><img src="./images/icons8-sunset.gif" class="img" alt="Set"></div>
+                <div class="card-body">
+                  <p class="card-text">
+                      <h4 class="text-center">Set</h4>
+                  </p>
+                  <div class="d-flex flex-column fs-3">
+                    <div><i class="fas fa-ruler"></i><div id="set_altitude" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Altitude" ></div></div>
+                    <div><i class="fas fa-drafting-compass"></i><div id="set_azimuth" class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth"></div></div>
+                    <div><i class="far fa-compass"></i><div id="set_octant" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Azimuth Octant"  ></div></div>
+                    <div><i class="far fa-calendar-alt"></i><div id="set_timestamp" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Local Time"  ></div></div>
+                    <div><i class="far fa-eye"></i><div id="set_visible" class="float-end"data-bs-toggle="tooltip" data-bs-placement="top" title="Visibility" ></div></div>
+                  </div>
+                </div>
+              </div> 
+        </div>   
+  
+  <!-- Modal -->
+  <div class="modal fade" id="mapModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Google Maps</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-4">
+                        <div><label for="CoOrdsLati">Latitude</label></div><br>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" name="CoOrdsLat" id="lat">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div><label for="CoOrdsLongi">Longitude</label></div><br>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" name="CoOrdsLong" id="lng">
+                    </div>
+                </div>
+            </div>
+            <div id="map"></div>
+             <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDHY6MoUJgdtIhHYk6A4p7p_WkcCChQ98&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Set Pointer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
